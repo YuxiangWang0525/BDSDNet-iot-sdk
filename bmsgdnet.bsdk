@@ -1,0 +1,27 @@
+?- BMSG Application standard SDK file
+!->
+intro:
+  en:BDSDNet SDK For BMSG applet
+  zh:适用于小程序的字节元数字服务分发网络SDK
+name: BDSDNet iot SDK
+<-!
+value.setholder.string("url","key","passkey");
+http.request("authping","POST",url,"/auth","key:*v;passkey*v"&key&passkey,true);
+authping.decode.self;
+if(authping.code==0){
+value.declear.bool("pass",true);
+}else{
+bmlet.error("Invalid verification information");
+stop();
+}
+mod bdsdnet(value.setholder.string("command");){
+  if (pass==true){
+    http.request("do_command","POST",url,"/intoshell","command:*v"&command,true);
+    do_command.decode.self;
+    if(do_command.code == 0){
+      bmlet.return("status",true);
+    }false{
+    bmlet.error("Command error");
+    }
+  }
+}
